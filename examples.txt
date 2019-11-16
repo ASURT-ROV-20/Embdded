@@ -1,0 +1,123 @@
+1)GPIO Examples:
+    1-GPIO pins (D0 : D8):
+        D1 : D8 --> Can be used in pwm 
+        D1 : D8 --> have pullup capability
+        D1 : D8 --> external interupts
+        D0 --> can't be used in pwm , interupts and dosen't have pullup capability
+
+    2-Example code:
+*********************************************************************************************************************************************************************************
+* from machine import Pin                                                                                                                                                       *
+* from constants import gpio                                                                                                                                                    *
+*                                                                                                                                                                               *
+* p1 = Pin(gpio("D4"),Pin.OUT)                                                    # make D4 output pin                                                                          *
+* p1.on()                                                                         # turn on D4 similar to digitalWrite(pin,HIGH)                                                *
+* p1.off()                                                                        # turn off D4 similar to digitalWrite(pin,LOW)                                                *
+*                                                                                                                                                                               *
+* p2 = Pin(gpio("D3"),Pin.IN,Pin.PULL_UP)                                         # make D3 input pin and use the internal pullup resistor                                      *
+* p2.value()                                                                      # read the value of D3                                                                        *
+*                                                                                                                                                                               *
+* p3 = Pin(gpio("D2"),Pin.IN)                                                     # make D2 input pin                                                                           *
+* p3.irq(trigger=Pin.IRQ_FALLING, handeler = callbackFunc)                        # attatch intrupt in D2 pin (on falling edge) and call a callbackFunc                         *
+*                                                                                                                                                                               *
+* p4 = Pin(gpio("D1"),Pin.IN)                                                     # make D1 input pin                                                                           *
+* p4.irq(trigger=Pin.IRQ_FALLING | Pin.IRQ_RISING, handeler = callbackFunc)       # attatch intrupt in D2 pin (both falling edge and rising edge) and call a callbackFunc       *
+*                                                                                                                                                                               *
+* p5 = Pin(gpio("D5"))                                                            # creat a var of D5 pin                                                                       *
+* pwm5 = PWM(p5)                                                                  # creat a var of PWM in D5 pin                                                                *
+* pwm5.freq(1000)                                                                 # set the freq to 1000 (0:1000)                                                               *
+* pwm5.duty(354)                                                                  # set the duty cyicle to 354 (0:1023)                                                         *
+* pwm.deinit()                                                                    # free pin D5 from PWM                                                                        *
+*********************************************************************************************************************************************************************************
+
+2)ADC Examples:
+    1- ADC pins (A0 only)
+         
+    2- Example code:
+*********************************************************************************************************************************************************************************
+* from machine import ADC                                                                                                                                                       *                           
+*                                                                                                                                                                               *
+* analogPin = ADC(0)                                                              # initialize adc                                                                              *
+* analogPin.read()                                                                # get adc reading (0:1023)                                                                    *
+*                                                                                                                                                                               *
+*********************************************************************************************************************************************************************************
+
+3)Internal file system: 
+    1- you can (open, read, delete) files 
+       directory operations
+    
+    2- Example code:
+        a) Reading & Writing files
+*********************************************************************************************************************************************************
+*
+* file1 = open("filename","states")                                               # creat a file object for (filename) file (states can be : w,r)
+* file1.read()                                                                    # read the file and returns it's contents
+* file1.write("data")                                                             # write data to file and returns number of chars writen
+* file1.close()                                                                   # close the file
+*
+**********************************************************************************************************************************************************
+        
+        b) Directory operations
+*************************************************************************************************************************************************************
+*                                                                                                                                                           *
+* from machine import os                                                                                                                                    *
+*                                                                                                                                                           *
+* os.chdir(path)                                                                  # chane current directory to path                                         *
+* os.getcwd()                                                                     # get current working directory                                           *
+* os.listdir([path])                                                              # list directory contents (current directory if no path)                  *
+* os.mkdir(name)                                                                  # creat new directory                                                     *
+* os.remove(path)                                                                 # remove file                                                             *
+* os.rmdir(path)                                                                  # remove directory                                                        *
+* os.rename(path,newPath)                                                         # rename file or directory                                                *
+*                                                                                                                                                           *
+*************************************************************************************************************************************************************
+
+4)Deleys
+    1- Example code:
+*****************************************************************************************************************************************
+*
+* import time
+*
+* time.sleep(num)                                                                 # delay in secs
+* time.sleep_ms(num)                                                              # delay in ms
+* time.sleep_us(num)                                                              # delay in us
+* start = time.ticks_ms()                                                         # get millisecond counter (similar to millis())
+* duiration = time.ticks_diff(time.ticks_ms(),start)                              # get duiration between now and start in ms
+* start = time.ticks_us()                                                         # get microseconds counter (similar to micros())
+* duiration = time.ticks_diff(time.ticks_us(),start)                              # get duiration between now and start in us
+*
+********************************************************************************************************************************************
+
+5)timers
+    1- Example code:
+********************************************************************************************************************************************
+*
+* from machine import Timer
+*
+* tim = Timer(-1)                                                                 # init timer
+* tim.init(period=P, mode=Timer.ONE_SHOT, callback)                               # setup timer to be fired after 1000ms for once
+* tim.init(period=P, mode=TIMER.PERIODIC, callback)                               # setup timer to be fired every 1000ms
+*
+************************************************************************************************************************************************
+
+6) NETWORK basics:
+    A)Station
+****************************************************************************************************************************************************
+
+import network
+
+station = network.WLAN(network.STA_IF)                                          
+station.active(True)
+station.scan()
+station.connect("ssid","password")
+station.isconnected()
+
+********************************************************************************************************************************************************
+    B)Access Point
+********************************************************************************************************************************************************
+
+import network
+
+aPoint = network.WLAN(network.AP_IF)
+aPoint.config(essid="name", password="pass")
+aPoint.active(True)
