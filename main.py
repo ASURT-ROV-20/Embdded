@@ -4,6 +4,8 @@ from pwmMesure import calcPWM
 from time import time, sleep
 
 def init():
+    #max_volt = 3.3
+    #max_bits = 4095
     print("initalizing pins ...")
     #initalizing input pins to mesure pwms
     right_front_esc = Pin(gpio_32("D4"),Pin.IN)
@@ -32,6 +34,9 @@ def init():
 
 int start():
     while(1):
+        #right_front_reading = right_front_voltage.read()
+        #right_front_output = ((right_front_reading*max_volt)/max_bits)
+        #print(right_front_output)
         print("right_front_esc : ",calcPWM(right_front_esc))
         uart.write(calcPWM(right_front_esc))
         sleep(0.05)
