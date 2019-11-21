@@ -1,0 +1,2 @@
+dmesg | grep tty  -> to get connected serial 
+
