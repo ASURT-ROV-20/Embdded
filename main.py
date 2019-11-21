@@ -1,11 +1,13 @@
 from machine import Pin,PWM,ADC,UART
 from gpio import gpio_32
 from pwmMesure import calcPWM
-from time import time
+from time import time, sleep
 
 print("main Code goes here")
 
 def init():
+    #max_volt = 3.3
+    #max_bits = 4095
     print("initalizing pins ...")
     #initalizing input pins to mesure pwms
     right_front_esc = Pin(gpio_32("D4"),Pin.IN)
@@ -34,29 +36,42 @@ def init():
 
 def start():
     while(1):
+        #right_front_reading = right_front_voltage.read()
+        #right_front_output = ((right_front_reading*max_volt)/max_bits)
+        #print(right_front_output)
         print("right_front_esc : ",calcPWM(right_front_esc))
         uart.write(calcPWM(right_front_esc))
+        sleep(0.05)
         print("left_front_esc : ",calcPWM(left_front_esc))
         uart.write(calcPWM(left_front_esc))
+        sleep(0.05)
         print("right_back_esc : ",calcPWM(right_back_esc))
         uart.write(calcPWM(right_back_esc))
+        sleep(0.05)
         print("left_back_esc : ",calcPWM(left_back_esc))
         uart.write(calcPWM(left_back_esc))
+        sleep(0.05)
         print("vertical_right_esc : ",calcPWM(vertical_right_esc))
         uart.write(calcPWM(vertical_right_esc))
+        sleep(0.05)
         print("vertical_left_esc : ",calcPWM(vertical_left_esc))
         uart.write(calcPWM(vertical_left_esc))
-        
+        sleep(0.05)
         print("right_front_voltage : ",right_front_voltage.read())
         uart.write(right_front_voltage.read())
+        sleep(0.05)
         print("left_front_voltage : ",left_front_voltage.read())
         uart.write(left_front_voltage.read())
+        sleep(0.05)
         print("right_back_voltage : ",right_back_voltage.read())
         uart.write(right_back_voltage.read())
+        sleep(0.05)
         print("left_back_voltage : ",left_back_voltage.read())
         uart.write(left_back_voltage.read())
+        sleep(0.05)
         print("vertical_right_voltage : ",vertical_right_voltage.read())
         uart.write(vertical_right_voltage.read())
+        sleep(0.05)
         print("vertical_left_voltage : ",vertical_left_voltage.read())
         uart.write(vertical_left_voltage.read())
         time.sleep(1)
