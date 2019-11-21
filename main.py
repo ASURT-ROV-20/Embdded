@@ -3,6 +3,8 @@ from gpio import gpio_32
 from pwmMesure import calcPWM
 from time import time
 
+print("main Code goes here")
+
 def init():
     print("initalizing pins ...")
     #initalizing input pins to mesure pwms
@@ -30,7 +32,7 @@ def init():
     uart = UART(0, baudrate=9600)
     
 
-int start():
+def start():
     while(1):
         print("right_front_esc : ",calcPWM(right_front_esc))
         uart.write(calcPWM(right_front_esc))

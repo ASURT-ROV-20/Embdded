@@ -6,5 +6,5 @@ from main import *
 #import webrepl
 #webrepl.start()
 gc.collect()
-init()
-start()
+# init()
+# start()

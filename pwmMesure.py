@@ -26,7 +26,7 @@ def irqCallback(pin):
         pin.irq(trigger=0,handler=irqCallback)
         state = 0
         time3 = time.ticks_cpu()
-        pwmValue = int(((time2-time1)/(time3-time1))*4096)
+        pwmValue = int(((time2-time1)/(time3-time1))*4095) #255 for arduino, 4096 for hat
 
 
 def calcPWM(pin):
