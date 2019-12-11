@@ -1,77 +1,78 @@
-from machine import Pin,PWM,ADC,UART
-from gpio import gpio_32
+from ads1115 import ADS1115
+from machine import I2C,Pin
 from pwmMesure import calcPWM
-from time import time, sleep
+import time
 
-print("main Code goes here")
+def calcOffset(adsObject,channel):
+    global min, max
+    t1 = time.ticks_ms()
+    sum = 0
+    for a in range(50):
+        reading = adsObject.read(rate,channel)
+        if(reading > max) :
+            max = reading
+        if(reading < min):
+            min = reading
+        sum += reading
+        time.sleep(0.03)
+    print("time is ",(time.ticks_ms()-t1)/50," ms")
+    return sum/50
 
 def init():
-    #max_volt = 3.3
-    #max_bits = 4095
-    print("initalizing pins ...")
-    #initalizing input pins to mesure pwms
-    right_front_esc = Pin(gpio_32("D4"),Pin.IN)
-    left_front_esc = Pin(gpio_32("D4"),Pin.IN)
-    right_back_esc = Pin(gpio_32("D4"),Pin.IN)
-    left_back_esc = Pin(gpio_32("D4"),Pin.IN)
-    vertical_right_esc = Pin(gpio_32("D4"),Pin.IN)
-    vertical_left_esc = Pin(gpio_32("D4"),Pin.IN)
-    #initalizing ADC Pins 
-    right_front_voltage = ADC(Pin(gpio_32("D4")))
-    left_front_voltage = ADC(Pin(gpio_32("D4")))
-    right_back_voltage = ADC(Pin(gpio_32("D4")))
-    left_back_voltage = ADC(Pin(gpio_32("D4")))
-    vertical_right_voltage = ADC(Pin(gpio_32("D4")))
-    vertical_left_voltage = ADC(Pin(gpio_32("D4")))
-    #Set attenuation fpr -11DB to mesure voltages from 0 to 3.3V
-    right_front_voltage.atten(ADC.ATTN_11DB)
-    left_front_voltage.atten(ADC.ATTN_11DB)
-    right_back_voltage.atten(ADC.ATTN_11DB)
-    left_back_voltage.atten(ADC.ATTN_11DB)
-    vertical_right_voltage.atten(ADC.ATTN_11DB)
-    vertical_left_voltage.atten(ADC.ATTN_11DB)
-    #initialize uart
-    uart = UART(0, baudrate=9600)
-    
+    offset = []
+    offset.append(calcOffset(ADC0,0))
+    offset.append(calcOffset(ADC0,1))
+    offset.append(calcOffset(ADC0,2))
+    offset.append(calcOffset(ADC0,3))
+    offset.append(calcOffset(ADC1,0))
+    offset.append(calcOffset(ADC1,1))
+    offset.append(calcOffset(ADC1,2))
+    offset.append(calcOffset(ADC1,3))
+    print("Error range in Current Mesurments is ",(max-min)*4.687643)
+    return offset
 
-def start():
-    while(1):
-        #right_front_reading = right_front_voltage.read()
-        #right_front_output = ((right_front_reading*max_volt)/max_bits)
-        #print(right_front_output)
-        print("right_front_esc : ",calcPWM(right_front_esc))
-        uart.write(calcPWM(right_front_esc))
-        sleep(0.05)
-        print("left_front_esc : ",calcPWM(left_front_esc))
-        uart.write(calcPWM(left_front_esc))
-        sleep(0.05)
-        print("right_back_esc : ",calcPWM(right_back_esc))
-        uart.write(calcPWM(right_back_esc))
-        sleep(0.05)
-        print("left_back_esc : ",calcPWM(left_back_esc))
-        uart.write(calcPWM(left_back_esc))
-        sleep(0.05)
-        print("vertical_right_esc : ",calcPWM(vertical_right_esc))
-        uart.write(calcPWM(vertical_right_esc))
-        sleep(0.05)
-        print("vertical_left_esc : ",calcPWM(vertical_left_esc))
-        uart.write(calcPWM(vertical_left_esc))
-        sleep(0.05)
-        print("right_front_voltage : ",right_front_voltage.read())
-        uart.write(right_front_voltage.read())
-        sleep(0.05)
-        print("left_front_voltage : ",left_front_voltage.read())
-        uart.write(left_front_voltage.read())
-        sleep(0.05)
-        print("right_back_voltage : ",right_back_voltage.read())
-        uart.write(right_back_voltage.read())
-        sleep(0.05)
-        print("left_back_voltage : ",left_back_voltage.read())
-        uart.write(left_back_voltage.read())
-        sleep(0.05)
-        print("vertical_right_voltage : ",vertical_right_voltage.read())
-        uart.write(vertical_right_voltage.read())
-        sleep(0.05)
-        print("vertical_left_voltage : ",vertical_left_voltage.read())
-        uart.write(vertical_left_voltage.read())
-        time.sleep(1)
+
+def startMesurement():
+    global offset, ADC0, ADC1, PWM
+    while (True):
+        #print(offset)
+        t1 = time.ticks_ms()
+        print("ADC Channel1 ",(ADC0.read(rate,0)-offset[0])*4.687643,"mA")
+        print("ADC Channel2 ",(ADC0.read(rate,1)-offset[1])*4.687643,"mA")
+        print("ADC Channel3 ",(ADC0.read(rate,2)-offset[2])*4.687643,"mA")
+        print("ADC Channel4 ",(ADC0.read(rate,3)-offset[3])*4.687643,"mA")
+        print("ADC Channel5 ",(ADC1.read(rate,0)-offset[0])*4.687643,"mA")
+        print("ADC Channel6 ",(ADC1.read(rate,1)-offset[1])*4.687643,"mA")
+        print("ADC Channel7 ",(ADC1.read(rate,2)-offset[2])*4.687643,"mA")
+        print("ADC Channel8 ",(ADC1.read(rate,3)-offset[3])*4.687643,"mA")
+        print("PWM Channel1 ",calcPWM(PWM[0]))
+        print("PWM Channel2 ",calcPWM(PWM[1]))
+        print("PWM Channel3 ",calcPWM(PWM[2]))
+        print("PWM Channel4 ",calcPWM(PWM[3]))
+        print("PWM Channel5 ",calcPWM(PWM[4]))
+        print("PWM Channel6 ",calcPWM(PWM[5]))
+        print("time is ",time.ticks_ms()-t1," ms")
+
+rate = 1
+min = 32768
+max = 0
+i2c = I2C(scl = Pin(22), sda = Pin(21))
+ADC0 = ADS1115(i2c, 72, 0)
+ADC1 = ADS1115(i2c, 73, 0)
+pwm1 = Pin(2,Pin.IN)
+pwm2 = Pin(2,Pin.IN)
+pwm3 = Pin(2,Pin.IN)
+pwm4 = Pin(2,Pin.IN)
+pwm5 = Pin(2,Pin.IN)
+pwm6 = Pin(2,Pin.IN)
+offset = []
+PWM = [pwm1, pwm2, pwm3, pwm4, pwm5, pwm6]
+
+
+def run_mesure():
+    global offset
+    offset = init()
+    startMesurement()
+    
+def getJson():
+    return "json File"
