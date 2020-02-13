@@ -26,7 +26,7 @@
   </Data>
   <Data name="FrameConfigLine1.Offset">
     <Type>String</Type>
-    <Value>0x00000</Value>
+    <Value>0x01000</Value>
   </Data>
   <Data name="FrameConfigLine2.Checked">
     <Type>Boolean</Type>
