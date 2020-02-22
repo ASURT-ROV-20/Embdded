@@ -1,4 +1,4 @@
-"""
+'''
 MicroPython driver for SD cards using SPI bus.
 
 Requires an SPI bus and a CS pin.  Provides readblocks and writeblocks
@@ -18,7 +18,7 @@ Example usage on ESP8266:
     os.mount(sd, '/sd')
     os.listdir('/')
 
-"""
+'''
 
 from micropython import const
 import time
@@ -42,7 +42,6 @@ class SDCard:
     def __init__(self, spi, cs):
         self.spi = spi
         self.cs = cs
-
         self.cmdbuf = bytearray(6)
         self.dummybuf = bytearray(512)
         self.tokenbuf = bytearray(1)
@@ -75,7 +74,7 @@ class SDCard:
             self.spi.write(b'\xff')
 
         # CMD0: init card; should return _R1_IDLE_STATE (allow 5 attempts)
-        for _ in range(1000):
+        for _ in range(5):
             if self.cmd(0, 0, 0x95) == _R1_IDLE_STATE:
                 break
         else:
