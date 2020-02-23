@@ -6,14 +6,14 @@ _ADC_SAMPLE_RATE = const(1)
 _ADC_MIN_VALUE   = const(32768)
 _ADC_MAX_VALUE   = const(0)
 
-_ADC_CHANNEL_1   = "MOTOR1"
-_ADC_CHANNEL_2   = "MOTOR2"
-_ADC_CHANNEL_3   = "MOTOR3"
-_ADC_CHANNEL_4   = "MOTOR4"
-_ADC_CHANNEL_5   = "MOTOR5"
-_ADC_CHANNEL_6   = "MOTOR6"
-_ADC_CHANNEL_7   = "MOTOR7"
-_ADC_CHANNEL_8   = "MOTOR8"
+_ADC_CHANNEL_1   = "CH1"
+_ADC_CHANNEL_2   = "CH2"
+_ADC_CHANNEL_3   = "CH3"
+_ADC_CHANNEL_4   = "CH4"
+_ADC_CHANNEL_5   = "CH5"
+_ADC_CHANNEL_6   = "CH6"
+_ADC_CHANNEL_7   = "CH7"
+_ADC_CHANNEL_8   = "CH8"
 
 i2c = I2C(scl = Pin(22), sda = Pin(21))
 adc0 = ADC(i2c, 72, 0)
@@ -47,7 +47,7 @@ def init_ADC():
 
 def adcMesure():
     global adc0, adc1, offset
-    output = {}
+    output = []
     # output[_ADC_CHANNEL_1] = (adc0.read(_ADC_SAMPLE_RATE,0)-offset[0])
     # output[_ADC_CHANNEL_2] = (adc0.read(_ADC_SAMPLE_RATE,1)-offset[1])
     # output[_ADC_CHANNEL_3] = (adc0.read(_ADC_SAMPLE_RATE,2)-offset[2])
@@ -56,13 +56,13 @@ def adcMesure():
     # output[_ADC_CHANNEL_6] = (adc1.read(_ADC_SAMPLE_RATE,1)-offset[5])
     # output[_ADC_CHANNEL_7] = (adc1.read(_ADC_SAMPLE_RATE,2)-offset[6])
     # output[_ADC_CHANNEL_8] = (adc1.read(_ADC_SAMPLE_RATE,3)-offset[7])
-    output[_ADC_CHANNEL_1] = -1
-    output[_ADC_CHANNEL_2] = -1
-    output[_ADC_CHANNEL_3] = -1
-    output[_ADC_CHANNEL_4] = -1
-    output[_ADC_CHANNEL_5] = -1
-    output[_ADC_CHANNEL_6] = -1
-    output[_ADC_CHANNEL_7] = -1
-    output[_ADC_CHANNEL_8] = -1
+    output.append(-1)
+    output.append(-1)
+    output.append(-1)
+    output.append(-1)
+    output.append(-1)
+    output.append(-1)
+    output.append(-1)
+    output.append(-1)
     # time.sleep(0.8)
     return output

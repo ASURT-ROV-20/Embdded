@@ -16,12 +16,12 @@ pwmPin4 = Pin(14, Pin.IN)
 pwmPin5 = Pin(14, Pin.IN)
 pwmPin6 = Pin(14, Pin.IN)
 
-_PWM_CHANNEL_1 = "CHANNEL1"
-_PWM_CHANNEL_2 = "CHANNEL2"
-_PWM_CHANNEL_3 = "CHANNEL3"
-_PWM_CHANNEL_4 = "CHANNEL4"
-_PWM_CHANNEL_5 = "CHANNEL5"
-_PWM_CHANNEL_6 = "CHANNEL6"
+_PWM_CHANNEL_1 = "CH1"
+_PWM_CHANNEL_2 = "CH2"
+_PWM_CHANNEL_3 = "CH3"
+_PWM_CHANNEL_4 = "CH4"
+_PWM_CHANNEL_5 = "CH5"
+_PWM_CHANNEL_6 = "CH6"
 
 def skipCallback(d):
     global skip, pwmValue
@@ -63,11 +63,11 @@ def calcPWM(pin):
 
 def pwmMesure():
     global pwmPin1, pwmPin2, pwmPin3, pwmPin4, pwmPin5, pwmPin6
-    output = {}
-    output[_PWM_CHANNEL_1] = calcPWM(pwmPin1)
-    output[_PWM_CHANNEL_2] = calcPWM(pwmPin2)
-    output[_PWM_CHANNEL_3] = calcPWM(pwmPin3)
-    output[_PWM_CHANNEL_4] = calcPWM(pwmPin4)
-    output[_PWM_CHANNEL_5] = calcPWM(pwmPin5)
-    output[_PWM_CHANNEL_6] = calcPWM(pwmPin6)
+    output = []
+    output.append(calcPWM(pwmPin1))
+    output.append(calcPWM(pwmPin2))
+    output.append(calcPWM(pwmPin3))
+    output.append(calcPWM(pwmPin4))
+    output.append(calcPWM(pwmPin5))
+    output.append(calcPWM(pwmPin6))
     return output
